@@ -91,6 +91,21 @@ try {
         ],
         'headers' => [ 'Accept' => 'application/json' ]
     ]);
+    
+    // 上传图片
+    $resp = $client->request('POST', 'https://api.mch.weixin.qq.com/v3/...', [
+        'body' =>\GuzzleHttp\Psr7\stream_for("body的内容"),
+        'headers' => [ 
+               'Accept'       => 'application/json',
+               "Content-Type" => " multipart/form-data;boundary=boundary",
+                // meta的json串 ,签名使用
+               "metaJson"     => '{ "filename": "filea.jpg", "sha256": " hjkahkjsjkfsjk78687dhjahdajhk " }',
+            ]
+    ]);
+
+
+
+
 } catch (RequestException $e) {
     // 进行错误处理
     echo $e->getMessage()."\n";

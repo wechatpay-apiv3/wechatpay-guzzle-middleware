@@ -131,11 +131,16 @@ class WechatPay2Credentials implements Credentials
     protected function buildMessage($nonce, $timestamp, RequestInterface $request)
     {
         $body = '';
-        $bodyStream = $request->getBody();
-        // TODO: handle non-seekable stream
-        if ($bodyStream->isSeekable()) {
-            $body = (string)$bodyStream;
-            $bodyStream->rewind();
+        // add metaJson header to sign update image
+        if ($request->hasHeader('metaJson')) {
+            $body = $request->getHeaderLine('metaJson');
+        } else {
+            $bodyStream = $request->getBody();
+            // TODO: handle non-seekable stream
+            if ($bodyStream->isSeekable()) {
+                $body = (string)$bodyStream;
+                $bodyStream->rewind();
+            }
         }
         
         return $request->getMethod()."\n".
