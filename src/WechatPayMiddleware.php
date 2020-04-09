@@ -101,7 +101,7 @@ class WechatPayMiddleware
             return $handler($request, $options)->then(
                 function (ResponseInterface $response) use ($request) {
                     $code = $response->getStatusCode();
-                    if ($code >= 200 && $code < 300 && !$this->validator->validate($response)) {
+                    if ($code > 200 && $code < 300 && !$this->validator->validate($response)) {
                         if (\class_exists('\\GuzzleHttp\\Exception\\ServerException')) {
                             throw new \GuzzleHttp\Exception\ServerException(
                                 "应答的微信支付签名验证失败", $request, $response);
