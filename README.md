@@ -95,11 +95,11 @@ try {
     // 上传图片
     $resp = $client->request('POST', 'https://api.mch.weixin.qq.com/v3/...', [
         'body' =>\GuzzleHttp\Psr7\stream_for("body的内容"),
+        // meta的json串 ,签名使用
+       "metaJson"     => '{ "filename": "filea.jpg", "sha256": " hjkahkjsjkfsjk78687dhjahdajhk " }',
         'headers' => [ 
                'Accept'       => 'application/json',
                "Content-Type" => " multipart/form-data;boundary=boundary",
-                // meta的json串 ,签名使用
-               "metaJson"     => '{ "filename": "filea.jpg", "sha256": " hjkahkjsjkfsjk78687dhjahdajhk " }',
             ]
     ]);
 
