@@ -31,9 +31,10 @@ interface Credentials
     /**
      * Get token of credentials
      *
+     * @param array $options options array
      * @param RequestInterface $request Api request
      *
      * @return string
      */
-    public function getToken(RequestInterface $request,$metaJson);
+    public function getToken(RequestInterface $request,$options);
 }

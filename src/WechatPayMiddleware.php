@@ -93,11 +93,8 @@ class WechatPayMiddleware
                 return $handler($request, $options);
             }
             $schema = $this->credentials->getSchema();
-            $metaJson = "";
-            if(array_key_exists("metaJson",$options)){
-                $metaJson = $options["metaJson"];
-            }
-            $token = $this->credentials->getToken($request,$metaJson);
+
+            $token = $this->credentials->getToken($request,$options);
 
             $request = $request->withHeader("Authorization", $schema.' '.$token);
             if (self::isUserAgentOverwritable($request)) {

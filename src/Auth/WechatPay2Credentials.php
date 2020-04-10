@@ -66,12 +66,12 @@ class WechatPay2Credentials implements Credentials
      *
      * @return string
      */
-    public function getToken(RequestInterface $request,$metaJson="")
+    public function getToken(RequestInterface $request,$options)
     {
         $nonce     = $this->getNonce();
         $timestamp = $this->getTimestamp();
 
-        $message = $this->buildMessage($nonce, $timestamp, $request,$metaJson);
+        $message = $this->buildMessage($nonce, $timestamp, $request,$options);
 
         $signResult = $this->signer->sign($message);
         $sign       = $signResult->getSign();
@@ -130,17 +130,17 @@ class WechatPay2Credentials implements Credentials
      * Build message to sign
      *
      * @param string $nonce Nonce string
+     * @param array $options options array
      * @param integer $timestamp Unix timestamp
      * @param RequestInterface $request Api request
      *
      * @return string
      */
-    protected function buildMessage($nonce, $timestamp, RequestInterface $request,$metaJson)
+    protected function buildMessage($nonce, $timestamp, RequestInterface $request,$options)
     {
-
         $body = '';
-        if ($metaJson != "") {
-            $body = $metaJson;
+        if (array_key_exists("metaJson",$options)) {
+            $body =  $options["metaJson"];
         } else {
             $bodyStream = $request->getBody();
             // TODO: handle non-seekable stream
