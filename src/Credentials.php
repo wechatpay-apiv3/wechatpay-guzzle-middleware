@@ -35,5 +35,5 @@ interface Credentials
      *
      * @return string
      */
-    public function getToken(RequestInterface $request);
+    public function getToken(RequestInterface $request,$metaJson);
 }

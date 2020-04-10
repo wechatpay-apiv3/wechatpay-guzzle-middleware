@@ -65,7 +65,7 @@ class WechatPay2Validator implements Validator
 
         $body = $this->getBody($response);
         $message = "$timestamp\n$nonce\n$body\n";
-
+     
         return $this->verifier->verify($serialNo, $message, $sign);
     }
  

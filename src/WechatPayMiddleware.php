@@ -11,6 +11,7 @@
 
 namespace WechatPay\GuzzleMiddleware;
 
+use app\api\controller\Pay;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -92,7 +93,12 @@ class WechatPayMiddleware
                 return $handler($request, $options);
             }
             $schema = $this->credentials->getSchema();
-            $token = $this->credentials->getToken($request);
+            $metaJson = "";
+            if(array_key_exists("metaJson",$options)){
+                $metaJson = $options["metaJson"];
+            }
+            $token = $this->credentials->getToken($request,$metaJson);
+
             $request = $request->withHeader("Authorization", $schema.' '.$token);
             if (self::isUserAgentOverwritable($request)) {
                 $request = $request->withHeader('User-Agent', self::getUserAgent());
@@ -101,7 +107,7 @@ class WechatPayMiddleware
             return $handler($request, $options)->then(
                 function (ResponseInterface $response) use ($request) {
                     $code = $response->getStatusCode();
-                    if ($code > 200 && $code < 300 && !$this->validator->validate($response)) {
+                    if ($code >= 200 && $code < 300 && !$this->validator->validate($response)) {
                         if (\class_exists('\\GuzzleHttp\\Exception\\ServerException')) {
                             throw new \GuzzleHttp\Exception\ServerException(
                                 "应答的微信支付签名验证失败", $request, $response);

@@ -11,6 +11,7 @@
 
 namespace WechatPay\GuzzleMiddleware;
 
+use WechatPay\GuzzleMiddleware\Auth\WechatPay2CredentialsImg;
 use WechatPay\GuzzleMiddleware\Credentials;
 use WechatPay\GuzzleMiddleware\Validator;
 use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
@@ -61,7 +62,22 @@ class WechatPayMiddlewareBuilder
      */
     public function withMerchant($merchantId, $serialNo, $privateKey)
     {
-        $this->credentials = new WechatPay2Credentials($merchantId, 
+        $this->credentials = new WechatPay2Credentials($merchantId, new PrivateKeySigner($serialNo, $privateKey));
+        return $this;
+    }
+
+    /**
+     * Set Merchant Infomation
+     *
+     * @param string            $merchantId   Merchant Id
+     * @param string            $serialNo     Merchant Certificate Serial Number
+     * @param string|resource   $privateKey   Merchant Certificate Private Key (string - PEM formatted key, or resource - key returned by openssl_get_privatekey)
+     *
+     * @return $this
+     */
+    public function withMerchantForImg($merchantId, $serialNo, $privateKey)
+    {
+        $this->credentials = new WechatPay2CredentialsImg($merchantId,
             new PrivateKeySigner($serialNo, $privateKey));
         return $this;
     }

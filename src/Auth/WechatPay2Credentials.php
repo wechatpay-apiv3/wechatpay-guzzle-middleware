@@ -46,7 +46,7 @@ class WechatPay2Credentials implements Credentials
     public function __construct($merchantId, Signer $signer)
     {
         $this->merchantId = $merchantId;
-        $this->signer = $signer;
+        $this->signer     = $signer;
     }
 
     /**
@@ -66,20 +66,26 @@ class WechatPay2Credentials implements Credentials
      *
      * @return string
      */
-    public function getToken(RequestInterface $request)
+    public function getToken(RequestInterface $request,$metaJson="")
     {
-        $nonce = $this->getNonce();
+        $nonce     = $this->getNonce();
         $timestamp = $this->getTimestamp();
 
-        $message = $this->buildMessage($nonce, $timestamp, $request);
-        
-        $signResult = $this->signer->sign($message);
-        $sign = $signResult->getSign();
-        $serialNo = $signResult->getCertificateSerialNumber();
+        $message = $this->buildMessage($nonce, $timestamp, $request,$metaJson);
 
-        $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
-            $this->merchantId, $nonce, $timestamp, $serialNo, $sign
+        $signResult = $this->signer->sign($message);
+        $sign       = $signResult->getSign();
+        $serialNo   = $signResult->getCertificateSerialNumber();
+
+        $token = sprintf(
+            'mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
+            $this->merchantId,
+            $nonce,
+            $timestamp,
+            $serialNo,
+            $sign
         );
+
         return $token;
     }
 
@@ -112,28 +118,29 @@ class WechatPay2Credentials implements Credentials
     {
         static $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
-        $randomString = '';
+        $randomString     = '';
         for ($i = 0; $i < 32; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
+
         return $randomString;
     }
 
     /**
      * Build message to sign
      *
-     * @param string            $nonce      Nonce string
-     * @param integer           $timestamp  Unix timestamp
-     * @param RequestInterface  $request    Api request
+     * @param string $nonce Nonce string
+     * @param integer $timestamp Unix timestamp
+     * @param RequestInterface $request Api request
      *
      * @return string
      */
-    protected function buildMessage($nonce, $timestamp, RequestInterface $request)
+    protected function buildMessage($nonce, $timestamp, RequestInterface $request,$metaJson)
     {
+
         $body = '';
-        // add metaJson header to sign update image
-        if ($request->hasHeader('metaJson')) {
-            $body = $request->getHeaderLine('metaJson');
+        if ($metaJson != "") {
+            $body = $metaJson;
         } else {
             $bodyStream = $request->getBody();
             // TODO: handle non-seekable stream
@@ -142,7 +149,7 @@ class WechatPay2Credentials implements Credentials
                 $bodyStream->rewind();
             }
         }
-        
+
         return $request->getMethod()."\n".
             $request->getRequestTarget()."\n".
             $timestamp."\n".

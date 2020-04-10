@@ -55,6 +55,7 @@ class CertificateVerifier implements Verifier
      */
     public function verify($serialNumber, $message, $signature)
     {
+
         $serialNumber = \strtoupper(\ltrim($serialNumber, '0')); // trim leading 0 and uppercase
         if (!isset($this->publicKeys[$serialNumber])) {
             return false;
