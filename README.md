@@ -137,6 +137,47 @@ try {
 }
 ```
 
+### 敏感信息加/解密
+
+```php
+// 参考上上述说明，引入 `SensitiveInfoCodec`
+use WechatPay\GuzzleMiddleware\Util\SensitiveInfoCodec;
+// 上行加密API 多于 下行解密，默认为加密，实例后直接当方法用即可
+$encryptor = new SensitiveInfoCodec(pem::loadCertificate('/downloaded/public.pem'));
+
+// 正常使用Guzzle发起API请求
+try {
+    // POST 语法糖
+    $resp = $client->post('/v3/applyment4sub/applyment/', [
+        'json' => [
+            'business_code' => 'APL_98761234',
+            'contact_info'  => [
+                'contact_name'      => $encryptor('窃格瓦拉'),
+                'contact_id_number' => $encryptor('45012119841227000X'),
+                'mobile_phone'      => $encryptor('12345678901'),
+                'contact_email'     => $encryptor('noop@real.world'),
+            ],
+            //...
+        ],
+        'headers' => [
+            'Accept' => 'application/json',
+        ],
+    ]);
+} catch (Exception $e) {
+    echo $e->getMessage()."\n";
+    if ($e->hasResponse()) {
+        echo $e->getResponse()->getStatusCode().' '.$e->getResponse()->getReasonPhrase()."\n";
+        echo $e->getResponse()->getBody();
+    }
+    return;
+}
+
+// 单例加解密示例如下
+$codec = new SensitiveInfoCodec($wechatpayCertificate, $merchantPrivateKey);
+$encrypted = $codec('窃格瓦拉');
+$decrypted = $codec->setStage('decrypt')($encrypted);
+```
+
 ## 定制
 
 当默认的本地签名和验签方式不适合你的系统时，你可以通过实现`Signer`或者`Verifier`来定制签名和验签。比如，你的系统把商户私钥集中存储，业务系统需通过远程调用进行签名，你可以这样做。
