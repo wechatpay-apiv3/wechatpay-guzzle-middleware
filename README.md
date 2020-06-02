@@ -143,7 +143,7 @@ try {
 // 参考上上述说明，引入 `SensitiveInfoCodec`
 use WechatPay\GuzzleMiddleware\Util\SensitiveInfoCodec;
 // 上行加密API 多于 下行解密，默认为加密，实例后直接当方法用即可
-$encryptor = new SensitiveInfoCodec(pem::loadCertificate('/downloaded/public.pem'));
+$encryptor = new SensitiveInfoCodec(PemUtil::loadCertificate('/downloaded/public.pem'));
 
 // 正常使用Guzzle发起API请求
 try {
