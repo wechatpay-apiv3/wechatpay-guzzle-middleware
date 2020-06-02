@@ -140,10 +140,10 @@ try {
 ### 敏感信息加/解密
 
 ```php
-// 参考上上述说明，引入 `SensitiveInfoCodec`
-use WechatPay\GuzzleMiddleware\Util\SensitiveInfoCodec;
+// 参考上上述说明，引入 `SensitiveInfoCrypto`
+use WechatPay\GuzzleMiddleware\Util\SensitiveInfoCrypto;
 // 上行加密API 多于 下行解密，默认为加密，实例后直接当方法用即可
-$encryptor = new SensitiveInfoCodec(PemUtil::loadCertificate('/downloaded/public.pem'));
+$encryptor = new SensitiveInfoCrypto(PemUtil::loadCertificate('/downloaded/public.pem'));
 
 // 正常使用Guzzle发起API请求
 try {
@@ -152,10 +152,10 @@ try {
         'json' => [
             'business_code' => 'APL_98761234',
             'contact_info'  => [
-                'contact_name'      => $encryptor('窃格瓦拉'),
-                'contact_id_number' => $encryptor('45012119841227000X'),
-                'mobile_phone'      => $encryptor('12345678901'),
-                'contact_email'     => $encryptor('noop@real.world'),
+                'contact_name'      => $encryptor('value of `contact_name`'),
+                'contact_id_number' => $encryptor('value of `contact_id_number'),
+                'mobile_phone'      => $encryptor('value of `mobile_phone`'),
+                'contact_email'     => $encryptor('value of `contact_email`'),
             ],
             //...
         ],
@@ -176,8 +176,8 @@ try {
 }
 
 // 单例加解密示例如下
-$codec = new SensitiveInfoCodec($wechatpayCertificate, $merchantPrivateKey);
-$encrypted = $codec('窃格瓦拉');
+$codec = new SensitiveInfoCrypto($wechatpayCertificate, $merchantPrivateKey);
+$encrypted = $codec('Alice');
 $decrypted = $codec->setStage('decrypt')($encrypted);
 ```
 

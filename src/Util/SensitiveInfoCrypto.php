@@ -1,6 +1,6 @@
 <?php
 /**
- * SensitiveInfoCodec
+ * SensitiveInfoCrypto
  * PHP version 7
  *
  * @category Class
@@ -15,17 +15,17 @@ namespace WechatPay\GuzzleMiddleware\Util;
  *
  * <code>
  * // Encrypt usage:
- * $codec = new SensitiveInfoCodec(Pem::loadCertificate('/downloaded/pubcert.pem'));
+ * $codec = new SensitiveInfoCrypto(PemUtil::loadCertificate('/downloaded/pubcert.pem'));
  * $json = json_encode(['name' => $codec('Alice')]);
  * // That's it simple!
  *
  * // Decrypt usage:
- * $codec = new SensitiveInfoCodec(null, Pem::loadPrivateKey('/merchant/key.pem'));
+ * $codec = new SensitiveInfoCrypto(null, PemUtil::loadPrivateKey('/merchant/key.pem'));
  * $decrypted = $codec->setStage('decrypt')('base64 encoding message was given by the payment plat');
  * // That's it simple too!
  *
  * // Working both Encrypt and Decrypt usage:
- * $codec = new SensitiveInfoCodec(
+ * $codec = new SensitiveInfoCrypto(
  *     Pem::loadCertificate('/merchant/cert.pem'),
  *     Pem::loadPrivateKey('/merchant/key.pem')
  * );
@@ -36,7 +36,7 @@ namespace WechatPay\GuzzleMiddleware\Util;
  *
  * @package  WechatPay
  */
-class SensitiveInfoCodec implements \JsonSerializable {
+class SensitiveInfoCrypto implements \JsonSerializable {
 
     /**
      * @var int Equal to OPENSSL_PKCS1_OAEP_PADDING constant,
@@ -68,6 +68,11 @@ class SensitiveInfoCodec implements \JsonSerializable {
     private $stage = 'encrypt';
 
     /**
+     * @var array $scenarios Methods that allowed.
+     */
+    private static $scenarios = ['encrypt', 'decrypt'];
+
+    /**
      * Constructor
      *
      * @param resource|null $publicCert The offical public certificate resource
@@ -83,7 +88,7 @@ class SensitiveInfoCodec implements \JsonSerializable {
      *
      * @param string $str The content shall be encrypted
      *
-     * @return SensitiveInfoCodec
+     * @return SensitiveInfoCrypto
      */
     private function encrypt($str) {
         openssl_public_encrypt($str, $encrypted, $this->publicCert, self::OPENSSL_PKCS1_OAEP_PADDING);
@@ -97,7 +102,7 @@ class SensitiveInfoCodec implements \JsonSerializable {
      *
      * @param string $str The content shall be decrypted
      *
-     * @return SensitiveInfoCodec
+     * @return SensitiveInfoCrypto
      */
     private function decrypt($str) {
         openssl_private_decrypt(base64_decode($str), $decrypted, $this->privateCert, self::OPENSSL_PKCS1_OAEP_PADDING);
@@ -120,9 +125,18 @@ class SensitiveInfoCodec implements \JsonSerializable {
      *
      * @param string $scenario Should be `encrypt` or `decrypt`
      *
-     * @return SensitiveInfoCodec
+     * @throws \InvalidArgumentException if the scenario is invalid.
+     *
+     * @return SensitiveInfoCrypto
      */
     public function setStage($scenario) {
+        if (!in_array($scenario, self::$scenarios)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot setStage `%s`, here is only allowed one of the %s',
+                $scenario,
+                \implode(', ', self::$scenarios)
+            ));
+        }
         $this->stage = $scenario;
 
         return $this;
