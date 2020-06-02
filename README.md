@@ -160,7 +160,10 @@ try {
             //...
         ],
         'headers' => [
-            'Accept' => 'application/json',
+            // 命令行获取证书序列号
+            // openssl x509 -in /downloaded/public.pem -noout -serial | awk -F= '{print $2}'
+            'Wechatpay-Serial' => 'must be the serial number via the downloaded pem file of `/v3/certificates`',
+            'Accept'           => 'application/json',
         ],
     ]);
 } catch (Exception $e) {
