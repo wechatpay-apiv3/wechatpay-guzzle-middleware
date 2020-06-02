@@ -21,8 +21,7 @@ namespace WechatPay\GuzzleMiddleware\Util;
  *
  * // Decrypt usage:
  * $codec = new SensitiveInfoCodec(null, Pem::loadPrivateKey('/merchant/key.pem'));
- * $name = (string) $codec('Bob');
- * $codes->setStage('decrypt')($name);
+ * $decrypted = $codec->setStage('decrypt')('base64 encoding message was given by the payment plat');
  * // That's it simple too!
  *
  * // Working both Encrypt and Decrypt usage:
