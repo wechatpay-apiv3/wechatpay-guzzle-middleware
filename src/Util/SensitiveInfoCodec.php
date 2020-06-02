@@ -35,7 +35,6 @@ namespace WechatPay\GuzzleMiddleware\Util;
  * </code>
  *
  * @package  WechatPay
- * @author   James Zhang(https://github.com/TheNorthMemory)
  */
 class SensitiveInfoCodec implements \JsonSerializable {
 
