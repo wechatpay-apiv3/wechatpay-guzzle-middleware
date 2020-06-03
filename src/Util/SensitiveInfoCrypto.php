@@ -1,7 +1,7 @@
 <?php
 /**
  * SensitiveInfoCrypto
- * PHP version 7
+ * PHP version 5
  *
  * @category Class
  * @package  WechatPay
@@ -39,19 +39,12 @@ namespace WechatPay\GuzzleMiddleware\Util;
 class SensitiveInfoCrypto implements \JsonSerializable {
 
     /**
-     * @var int Equal to OPENSSL_PKCS1_OAEP_PADDING constant,
-     *          to prevent the fault error while the PHP_VERSION < 7.0.
-     */
-    const OPENSSL_PKCS1_OAEP_PADDING = 4;
-
-    /**
-     * @var resource|null $publicCert The offical public certificate,
-     *                                which should be downloaded via `/v3/certificates`
+     * @var resource|null $publicCert The public certificate
      */
     private $publicCert;
 
     /**
-     * @var resource|null $privateCert The merchant private certificate
+     * @var resource|null $privateCert The private certificate
      */
     private $privateCert;
 
@@ -75,8 +68,8 @@ class SensitiveInfoCrypto implements \JsonSerializable {
     /**
      * Constructor
      *
-     * @param resource|null $publicCert The offical public certificate resource
-     * @param resource|null $privateCert The merchant private certificate resource
+     * @param resource|null $publicCert The public certificate resource
+     * @param resource|null $privateCert The private certificate resource
      */
     public function __construct($publicCert, $privateCert = null) {
         $this->publicCert = $publicCert;
@@ -91,7 +84,7 @@ class SensitiveInfoCrypto implements \JsonSerializable {
      * @return SensitiveInfoCrypto
      */
     private function encrypt($str) {
-        openssl_public_encrypt($str, $encrypted, $this->publicCert, self::OPENSSL_PKCS1_OAEP_PADDING);
+        openssl_public_encrypt($str, $encrypted, $this->publicCert, \OPENSSL_PKCS1_OAEP_PADDING);
         $this->message = base64_encode($encrypted);
 
         return $this;
@@ -105,7 +98,7 @@ class SensitiveInfoCrypto implements \JsonSerializable {
      * @return SensitiveInfoCrypto
      */
     private function decrypt($str) {
-        openssl_private_decrypt(base64_decode($str), $decrypted, $this->privateCert, self::OPENSSL_PKCS1_OAEP_PADDING);
+        openssl_private_decrypt(base64_decode($str), $decrypted, $this->privateCert, \OPENSSL_PKCS1_OAEP_PADDING);
         $this->message = $decrypted;
 
         return $this;
