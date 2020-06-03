@@ -11,23 +11,23 @@
 namespace WechatPay\GuzzleMiddleware\Util;
 
 /**
- * Codec for Encrypt/Decrypt the sensitive information by the certificates pair.
+ * Encrypt/Decrypt the sensitive information by the certificates pair.
  *
  * <code>
  * // Encrypt usage:
  * $codec = new SensitiveInfoCrypto(PemUtil::loadCertificate('/downloaded/pubcert.pem'));
  * $json = json_encode(['name' => $codec('Alice')]);
- * // That's it simple!
+ * // That's simple!
  *
  * // Decrypt usage:
  * $codec = new SensitiveInfoCrypto(null, PemUtil::loadPrivateKey('/merchant/key.pem'));
  * $decrypted = $codec->setStage('decrypt')('base64 encoding message was given by the payment plat');
- * // That's it simple too!
+ * // That's simple too!
  *
- * // Working both Encrypt and Decrypt usage:
+ * // Working both Encrypt and Decrypt usages:
  * $codec = new SensitiveInfoCrypto(
- *     Pem::loadCertificate('/merchant/cert.pem'),
- *     Pem::loadPrivateKey('/merchant/key.pem')
+ *     PemUtil::loadCertificate('/merchant/cert.pem'),
+ *     PemUtil::loadPrivateKey('/merchant/key.pem')
  * );
  * $encrypted = $codec('Carol');
  * $decrypted = $codec->setStage('decrypt')($encrypted);
