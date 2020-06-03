@@ -176,9 +176,9 @@ try {
 }
 
 // 单例加解密示例如下
-$codec = new SensitiveInfoCrypto($wechatpayCertificate, $merchantPrivateKey);
-$encrypted = $codec('Alice');
-$decrypted = $codec->setStage('decrypt')($encrypted);
+$crypto = new SensitiveInfoCrypto($wechatpayCertificate, $merchantPrivateKey);
+$encrypted = $crypto('Alice');
+$decrypted = $crypto->setStage('decrypt')($encrypted);
 ```
 
 ## 定制
