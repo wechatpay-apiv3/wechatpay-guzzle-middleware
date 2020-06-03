@@ -72,6 +72,11 @@ class SensitiveInfoCrypto implements \JsonSerializable {
      * @param resource|null $privateCert The private certificate resource
      */
     public function __construct($publicCert, $privateCert = null) {
+        if (!(is_resource($publicCert) || is_resource($privateCert))) {
+            throw new \InvalidArgumentException(
+                'The `publicCert`, `privateCert` must be available one resource at least'
+            );
+        }
         $this->publicCert = $publicCert;
         $this->privateCert = $privateCert;
     }
