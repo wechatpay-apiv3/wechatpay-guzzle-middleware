@@ -150,7 +150,8 @@ class SensitiveInfoCrypto implements \JsonSerializable {
     }
 
     public function __invoke($str) {
-        return (clone $this)->{$this->stage}($str);
+        $copy = clone $this;
+        return $copy->{$this->stage}($str);
     }
 
     public function __toString() {
