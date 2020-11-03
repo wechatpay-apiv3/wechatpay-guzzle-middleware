@@ -159,7 +159,7 @@ class WechatPayMiddleware
         if (!$userAgent) {
             $agent = 'WechatPay-Guzzle/'.self::VERSION;
             if (\class_exists('\\GuzzleHttp\\Client')) {
-                $agent .= ' GuzzleHttp/'.\GuzzleHttp\Client::VERSION;
+                $agent .= ' GuzzleHttp/x';
             }
             if (extension_loaded('curl') && function_exists('curl_version')) {
                 $agent .= ' curl/'.\curl_version()['version'];
