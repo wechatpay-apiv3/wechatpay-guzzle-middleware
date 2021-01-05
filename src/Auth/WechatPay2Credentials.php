@@ -70,13 +70,10 @@ class WechatPay2Credentials implements Credentials
     {
         $nonce = $this->getNonce();
         $timestamp = $this->getTimestamp();
-
         $message = $this->buildMessage($nonce, $timestamp, $request);
-        
         $signResult = $this->signer->sign($message);
         $sign = $signResult->getSign();
         $serialNo = $signResult->getCertificateSerialNumber();
-
         $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
             $this->merchantId, $nonce, $timestamp, $serialNo, $sign
         );
@@ -134,10 +131,10 @@ class WechatPay2Credentials implements Credentials
         $bodyStream = $request->getBody();
         // non-seekable stream need to be handled by the caller
         if ($bodyStream->isSeekable()) {
-            $body = (string)$bodyStream;
+            $body = $request->hasHeader('tobody') ? $request->getHeader('tobody')[0] : (string)$bodyStream;
+            if(is_array($body)) $body =  \GuzzleHttp\json_encode($body);
             $bodyStream->rewind();
         }
-        
         return $request->getMethod()."\n".
             $request->getRequestTarget()."\n".
             $timestamp."\n".

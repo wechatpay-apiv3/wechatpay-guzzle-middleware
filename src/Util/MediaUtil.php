@@ -50,6 +50,7 @@ class MediaUtil {
      */
     private $multipart;
 
+    public $multipartData;
 
     /**
      * multipart stream wrapper
@@ -92,7 +93,7 @@ class MediaUtil {
         ]);
         $this->meta = $json;
 
-        $multipart = new MultipartStream([
+        $this->multipartData = [
             [
                 'name'     => 'meta',
                 'contents' => $json,
@@ -105,7 +106,8 @@ class MediaUtil {
                 'filename' => $basename,
                 'contents' => $stream,
             ],
-        ]);
+        ];
+        $multipart = new MultipartStream($this->multipartData);
         $this->multipart = $multipart;
 
         $this->stream = FnStream::decorate($multipart, [
@@ -143,4 +145,6 @@ class MediaUtil {
     {
         return 'multipart/form-data; boundary=' . $this->multipart->getBoundary();
     }
+
+
 }
