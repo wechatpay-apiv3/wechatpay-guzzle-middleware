@@ -12,6 +12,7 @@
 
 当前版本为`0.2.0`测试版本。请商户的专业技术人员在使用时注意系统和软件的正确性和兼容性，以及带来的风险。
 
+本项目处于**维护**状态，我们推荐所有的开发者优先使用微信支付新的 PHP 开发库 [wechatpay-php](https://github.com/wechatpay-apiv3/wechatpay-php)。
 
 
 ## 环境要求
@@ -19,9 +20,9 @@
 我们开发和测试使用的环境如下：
 
 + PHP 5.5+ / PHP 7.0+
-+ guzzlehttp/guzzle 6.0+
++ guzzlehttp/guzzle ^6.3
 
-
+备注：不支持 guzzle7 的具体原因可以见 [#54](https://github.com/wechatpay-apiv3/wechatpay-guzzle-middleware/issues/54) 的[讨论](https://github.com/wechatpay-apiv3/wechatpay-guzzle-middleware/issues/54#issuecomment-879602192)。依赖 guzzle7 的开发者请使用 [wechatpay-php](https://github.com/wechatpay-apiv3/wechatpay-php)。
 
 ## 安装
 
