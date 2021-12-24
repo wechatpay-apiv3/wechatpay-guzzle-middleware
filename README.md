@@ -1,19 +1,20 @@
 # wechatpay-guzzle-middleware
 
+## :information_source: 提示
+
+本项目处于**维护**状态，不再更新特性，仅做必要的安全修复。
+
+推荐你使用新的微信支付 PHP 开发库 [wechatpay-php](https://github.com/wechatpay-apiv3/wechatpay-php)，支持 PHP7/8，更加安全、高效、功能丰富。如果你正在使用本中间件，升级请参考 [升级指南](https://github.com/wechatpay-apiv3/wechatpay-php/blob/main/UPGRADING.md#%E4%BB%8E-02-%E8%BF%81%E7%A7%BB%E8%87%B3-10)。
+
 ## 概览
 
 [微信支付API v3](https://wechatpay-api.gitbook.io/wechatpay-api-v3/)的[Guzzle HttpClient](http://docs.guzzlephp.org/)中间件Middleware，实现了请求签名的生成和应答签名的验证。
 
 如果你是使用Guzzle的商户开发者，可以在构造`GuzzleHttp\Client`时将`WechatPayGuzzleMiddleware`传入，得到的`GuzzleHttp\Client`实例在执行请求时将自动携带身份认证信息，并检查应答的微信支付签名。
 
-
-
 ## 项目状态
 
 当前版本为`0.2.0`测试版本。请商户的专业技术人员在使用时注意系统和软件的正确性和兼容性，以及带来的风险。
-
-本项目处于**维护**状态，我们推荐所有的开发者优先使用微信支付新的 PHP 开发库 [wechatpay-php](https://github.com/wechatpay-apiv3/wechatpay-php)。
-
 
 ## 环境要求
 
