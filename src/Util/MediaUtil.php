@@ -88,7 +88,7 @@ class MediaUtil {
 
         $json = \GuzzleHttp\json_encode([
             'filename' => $basename,
-            'sha256'   => \GuzzleHttp\Psr7\hash($stream, 'sha256'),
+            'sha256'   => method_exists(\GuzzleHttp\Psr7\Utils::class,'hash') ? \GuzzleHttp\Psr7\Utils::hash($stream, 'sha256') : \GuzzleHttp\Psr7\hash($stream, 'sha256'),
         ]);
         $this->meta = $json;
 
