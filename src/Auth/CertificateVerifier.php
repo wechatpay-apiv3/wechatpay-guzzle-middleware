@@ -64,7 +64,7 @@ class CertificateVerifier implements Verifier
             throw new \RuntimeException('当前PHP环境不支持SHA256withRSA');
         }
         $signature = \base64_decode($signature);
-        return \openssl_verify($message, $signature, $this->publicKeys[$serialNumber], 
-            'sha256WithRSAEncryption');
+        return \openssl_verify($message, $signature, $this->publicKeys[$serialNumber],
+            'sha256WithRSAEncryption') === 1;
     }
 }
