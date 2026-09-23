@@ -10,7 +10,7 @@
 
 ## 项目状态
 
-当前版本为`0.2.0`测试版本。请商户的专业技术人员在使用时注意系统和软件的正确性和兼容性，以及带来的风险。
+当前版本为`0.2.3`测试版本。请商户的专业技术人员在使用时注意系统和软件的正确性和兼容性，以及带来的风险。
 
 本项目处于**维护**状态，我们推荐所有的开发者优先使用微信支付新的 PHP 开发库 [wechatpay-php](https://github.com/wechatpay-apiv3/wechatpay-php)。
 
@@ -40,7 +40,7 @@ composer require wechatpay/wechatpay-guzzle-middleware
 
 ```json
     "require": {
-        "wechatpay/wechatpay-guzzle-middleware": "^0.2.0"
+        "wechatpay/wechatpay-guzzle-middleware": "^0.2.3"
     }
 ```
 添加配置后，执行安装
